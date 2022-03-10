@@ -1,5 +1,6 @@
 <template>
-<form class="formulaire">
+<div class="container">
+    <form class="formulaire">
       <div class="form-group">
     <label for="nom">Nom</label>
     <input type="text" class="form-control" id="nom" v-model="nom" aria-describedby="emailHelp" placeholder="Entrer nom" pattern="[A-Za-z]{2,10}[ -]?[A-Za-z]{2,10}" required>
@@ -33,6 +34,7 @@
   </div>
   <button type="submit" @click="verifyUserData" class="btn btn-primary">Envoyer</button>
 </form>
+</div>
 
 </template>
 

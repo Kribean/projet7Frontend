@@ -1,5 +1,6 @@
 <template>
-<div class="row">
+<div class="container">
+  <div class="row">
   <p id="messageErr"></p>
 </div>
 <div class="row">
@@ -19,6 +20,7 @@
 </form>
     </div>
     <div class="col-2"></div>
+</div>
 </div>
 
 </template>
@@ -41,14 +43,15 @@ export default {
                             'Content-Type':'application/json'
                         },
                         body: JSON.stringify({
-                            email:'bramael.bruno@gmail.com',
-                            motDePasse:"azerty"
+                            email:this.email,
+                            motDePasse:this.password
                         })
                     })
                     .then((data)=>{
                       return data.json()})
                     .then((data)=>{console.log(data);
-                      localStorage.setItem('leTokenUser',JSON.stringify(data))})
+                      localStorage.setItem('leTokenUser',JSON.stringify(data));
+                      this.$router.push('room')})
                     .catch(()=>{return document.getElementById('messageErr').textContent='Les identifiants taper n\' ont pas été retrouvé'})
     }
     
