@@ -8,8 +8,8 @@
         </div>
     <div class="card-body">
         <h5 class="card-title">Créé le {{userData.createdAt}} par {{userData.user.pseudo}}</h5>
-        <p class="card-text">{{userData.descriptif}}</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <p class="card-text">{{userData.descriptif}} and {{userData.imageUrl}}</p>
+        <img  v-bind:src="userData.imageUrl" class="img-fluid" alt="Responsive image">
         
     </div>
     <div class="row"></div>
