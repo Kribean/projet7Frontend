@@ -47,7 +47,7 @@
     
     </div>
     <div class="row" v-for="msg in tableauMessages" :key="msg"><!--mettre les commentaires-->
-        <CardComponent v-bind:msg="msg">
+        <CardComponent v-bind:msg="msg" >
         </CardComponent>
     </div>
 </div>
@@ -68,6 +68,7 @@ export default {
     return{
       pseudo:JSON.parse(localStorage.getItem('leTokenUser')).pseudo,
       tableauMessages:[],
+      tableauLikes:[],
       open:false,
       files:{},
       textAreaMessage:''
@@ -117,8 +118,11 @@ export default {
                         }})
         .then(result => {console.log('okboss');
         return result.json()})
-        .then(result => {console.log(result);
-            return this.tableauMessages = result})
+        .then(tableauMessages => {
+            console.log(tableauMessages)
+            this.tableauMessages = tableauMessages
+            }
+           )
     }
 }
 
