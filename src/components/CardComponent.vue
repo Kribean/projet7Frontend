@@ -19,33 +19,67 @@
           <button type="button" class="btn btn-primary btn-sm m-3" @click="likerMessage(userData.id,1)" v-if="!(userData.likeOrNot)"><i class="fa-solid fa-thumbs-up"></i> liker</button>
           <button type="button" class="btn btn-secondary btn-sm m-3" @click="likerMessage(userData.id,0)" v-else><i class="fa-solid fa-thumbs-up"></i> unliker</button>
           </div>
-        <div class="col-6"><button type="button" class="btn btn-primary btn-sm m-3"><i class="fa-solid fa-message"></i> commenter</button></div>
+        <div class="col-6"><button type="button" class="btn btn-primary btn-sm m-3" @click="boolComm=!boolComm"><i class="fa-solid fa-message"></i> commenter</button></div>
+    </div>
+    <div class="row" v-show="boolComm">
+          <form>
+                <div class="form-group m-4">
+                <textarea class="form-control" v-bind:id="userData.id" rows="3" placeholder="Votre commentaire" required></textarea>
+                </div>
+                <div class="row justify-content-center">
+                    <button type="submit" @click="sendMessage(userData.id)" class="btn btn-success m-4 btn-full">Envoyer</button>
+                </div>
+            </form>
     </div>
     <div class="row">
-        <button type="button" class="btn btn-secondary btn-lg btn-block">Commentaire(s)</button>
+        <button type="button" class="btn btn-secondary btn-lg btn-block" @click="showComments(userData.id)">Commentaire(s)</button>
     </div>
-    <div class="row">
-
+    <div class="row" v-for="comm in tableauComments" :key="comm"> <!--ici on met les comm il faut une card comm-->
+     <CardCommentaire v-bind:comm="comm"></CardCommentaire>
     </div>
     </div>
 </template>
 
 <script>
+import CardCommentaire from './CardCommentaire.vue'
 export default {
+      name: 'CardComponent',
+    components: {
+        CardCommentaire
+    },
     props:['msg'],
   data() {
-    console.log(this.msg);
-    console.log(this.msg.nbLikes)
     return{
+      boolComm:false,
         userData:this.msg,
+        tableauComments:[],
         nbDeLikePourLeMessage:this.msg.likes.length,
       pseudo:JSON.parse(localStorage.getItem('leTokenUser')).pseudo,
       userId:JSON.parse(localStorage.getItem('leTokenUser')).userId,
     }
   },
   methods: {
+    sendMessage(idComm)
+    {
+      let textComment = document.getElementById(idComm).value;
+      let urlComment = 'http://localhost:3000/api/message/'+idComm+'/comments'
+      if(textComment.trim())
+      {
+        fetch(urlComment,{
+        method: 'POST',
+        headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token
+        },
+        body: JSON.stringify({
+        descriptif:textComment,
+        })
+      })
+      }
+      
+    },
     likerMessage(identiteMessage,valueLike){
-      alert(this.userData.likeOrNot);
       let url = 'http://localhost:3000/api/message/'+identiteMessage+'/like';
       fetch(url,{
         method: 'POST',
@@ -69,6 +103,22 @@ export default {
         this.userData.likeOrNot=false;
       }
       
+    },
+    showComments(identiteMessage){
+              fetch('http://localhost:3000/api/message/'+identiteMessage+'/allComments',{
+                        method: 'GET',
+                        headers:{
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token,
+                        }})
+        .then(result => {console.log('okboss');
+        return result.json()})
+        .then(tableauComments => {
+            console.log(tableauComments)
+            this.tableauComments = tableauComments
+            }
+           )
     }
     
   },

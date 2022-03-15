@@ -46,6 +46,7 @@
     </MyModal>
     
     </div>
+
     <div class="row" v-for="msg in tableauMessages" :key="msg"><!--mettre les commentaires-->
         <CardComponent v-bind:msg="msg" >
         </CardComponent>
@@ -72,9 +73,6 @@ export default {
       open:false,
       files:{},
       textAreaMessage:''
-      
-      
-
     }
   },
   methods: {
