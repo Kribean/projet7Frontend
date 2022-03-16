@@ -2,14 +2,15 @@
 <template>
     <div class="card mt-4">
         <div class="row">
-            <div class="col-6"><h5 class="card-header">Groupomania</h5></div>
-            <div class="col-6" ><button type="button" class="btn btn-danger" v-if="userId==userData.userId">Supprimer</button></div>
-            
+            <div class="col-6 card-header"><h5>Groupomania</h5></div>
+            <div class="col-3 card-header" ><button type="button" class="btn btn-dark" v-if="userId==userData.userId" @click="$emit('open-modal-to-modify',userData)" >Modifier</button></div>
+            <div class="col-3 card-header" ><button type="button" class="btn btn-danger" v-if="userId==userData.userId">Supprimer</button></div>
+
         </div>
     <div class="card-body">
         <h5 class="card-title">Créé le {{userData.createdAt}} par {{userData.user.pseudo}}</h5>
         <p class="card-text">{{userData.descriptif}}</p>
-        <img  v-bind:src="userData.imageUrl" class="img-fluid" alt="Responsive image">
+        <img v-if="userData.imageUrl != 'NULL'" v-bind:src="userData.imageUrl" class="img-fluid" alt="Responsive image">
         
     </div>
     <div class="row"></div>
@@ -34,7 +35,7 @@
     <div class="row">
         <button type="button" class="btn btn-secondary btn-lg btn-block" @click="showComments(userData.id)">Commentaire(s)</button>
     </div>
-    <div class="row" v-for="comm in tableauComments" :key="comm"> <!--ici on met les comm il faut une card comm-->
+    <div class="row" v-for="comm in tableauComments" :key="comm" v-show="boolCommView"> <!--ici on met les comm il faut une card comm-->
      <CardCommentaire v-bind:comm="comm"></CardCommentaire>
     </div>
     </div>
@@ -43,6 +44,7 @@
 <script>
 import CardCommentaire from './CardCommentaire.vue'
 export default {
+  emits:['open-modal-to-modify'],
       name: 'CardComponent',
     components: {
         CardCommentaire
@@ -52,6 +54,7 @@ export default {
     return{
       boolComm:false,
         userData:this.msg,
+        boolCommView:false,
         tableauComments:[],
         nbDeLikePourLeMessage:this.msg.likes.length,
       pseudo:JSON.parse(localStorage.getItem('leTokenUser')).pseudo,
@@ -65,6 +68,8 @@ export default {
       let urlComment = 'http://localhost:3000/api/message/'+idComm+'/comments'
       if(textComment.trim())
       {
+        this.boolComm = false;
+        this.boolCommView=false;
         fetch(urlComment,{
         method: 'POST',
         headers:{
@@ -76,6 +81,7 @@ export default {
         descriptif:textComment,
         })
       })
+
       }
       
     },
@@ -105,20 +111,26 @@ export default {
       
     },
     showComments(identiteMessage){
-              fetch('http://localhost:3000/api/message/'+identiteMessage+'/allComments',{
+      alert(identiteMessage);
+
+      this.boolCommView = !this.boolCommView;
+      if(this.boolCommView){
+                      fetch('http://localhost:3000/api/message/'+identiteMessage+'/allComments',{
                         method: 'GET',
                         headers:{
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token,
                         }})
-        .then(result => {console.log('okboss');
+        .then(result => {
         return result.json()})
         .then(tableauComments => {
             console.log(tableauComments)
             this.tableauComments = tableauComments
             }
            )
+      }
+
     }
     
   },

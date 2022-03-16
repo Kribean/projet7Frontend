@@ -1,4 +1,5 @@
 <template>
+<NavBarBefore></NavBarBefore>
 <div class="container">
   <div class="row">
   <p id="messageErr"></p>
@@ -26,7 +27,11 @@
 </template>
 
 <script>
+import NavBarBefore from '../components/NavBarBefore.vue'
 export default {
+      name: 'LoginView',
+    components: {NavBarBefore
+    },
   data() {
     return{
       email:'',

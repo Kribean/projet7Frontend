@@ -1,5 +1,5 @@
 <template>
-<NavBarBefore></NavBarBefore>
+<NavBarAfter></NavBarAfter>
 <div class="container">
     <form class="formulaire">
       <div class="form-group">
@@ -17,42 +17,22 @@
     <input type="text" class="form-control" id="pseudo" v-model="pseudo" aria-describedby="emailHelp" placeholder="Entrer pseudo" pattern="[A-Za-z]{2,10}[ -]?[A-Za-z]{2,10}" required>
     <p id="pseudoErrorMsg"></p>
   </div>
-  <div class="form-group">
-    <label for="email">Votre email</label>
-    <input type="email" class="form-control" id="email" v-model="email" aria-describedby="emailHelp" placeholder="Entrer votre email" required>
-    <p id="emailErrorMsg"></p>
-  </div>
-  <div class="form-group">
-    <label for="password">Mot de passe</label>
-    <input type="password" class="form-control" id="password" v-model="password"   required>
-    <p id="passwordErrorMsg"></p>
-  </div>
-
-  <div class="form-group form-check">
-    <input type="checkbox" class="form-check-input" id="check">
-    <label class="form-check-label" for="check">J'ai lu la RGPD</label>
-    <p id="checkErrorMsg"></p>
-  </div>
-  <button type="submit" @click="verifyUserData" class="btn btn-primary">Envoyer</button>
+  <button type="submit" @click="verifyUserData" class="btn btn-primary">Modifier</button>
 </form>
 </div>
 
 </template>
 
 <script>
-import NavBarBefore from '../components/NavBarBefore.vue'
+import NavBarAfter from '../components/NavBarAfter.vue'
 	export default {
-    name: 'RegisterView',
-    components: {NavBarBefore
-    },
+    name: 'ProfileView',
+    components: {NavBarAfter },
 		data() {
 			return {
-				nom:'',
-        prenom:'',
-        email:'',
-        pseudo:'',
-        password:'',
-        check:false
+				nom:JSON.parse(localStorage.leTokenUser).nom,
+                prenom:JSON.parse(localStorage.leTokenUser).prenom,
+                pseudo:JSON.parse(localStorage.leTokenUser).pseudo,
 			}
 		},
 		methods:{
@@ -75,28 +55,28 @@ import NavBarBefore from '../components/NavBarBefore.vue'
                 }
                 if(lesValiditeDeChamps)
                 {
-                    fetch('http://localhost:3000/api/auth/signup',{
-                        method: 'POST',
+                    fetch('http://localhost:3000/api/auth/modifyProfil',{
+                        method: 'PUT',
                         headers:{
                             'Accept':'application/json',
-                            'Content-Type':'application/json'
+                            'Content-Type':'application/json',
+                            'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token,
                         },
                         body: JSON.stringify({
                             nom:this.nom,
                             prenom:this.prenom,
                             pseudo:this.pseudo,
-                            email:this.email,
-                            motDePasse:this.password
+
                         })
                     })
                     .then(()=>{
-                        this.$router.push('login')})
+                        console.log('toutou');
+                        localStorage.setItem('leTokenUser', JSON.stringify({pseudo: this.pseudo, nom: this.nom, prenom: this.prenom, userId:JSON.parse(localStorage.leTokenUser).userId, token:JSON.parse(localStorage.leTokenUser).token}));
+                        this.$router.push('room')})
                 }
             }
 		},
-		created() {
-			
-		}
+
 	}
 </script>
 

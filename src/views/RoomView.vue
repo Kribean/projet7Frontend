@@ -1,5 +1,6 @@
 
 <template>
+<NavBarAfter></NavBarAfter>
 <div class="container">
     <div class="row">
         <section class="bg-primary">
@@ -13,7 +14,7 @@
                 <p class="h4 text-center"><i class="fa-solid fa-user"></i> Bienvenue {{pseudo}}</p>
             </div>
             <div class="col-8">
-                <button type="button" class="btn btn-light btn-lg btn-block btn-full mt-2 mb-2 mr-2" @click="open = !open">Que voulez-vous dire?</button>
+                <button type="button" class="btn btn-light btn-lg btn-block btn-full mt-2 mb-2 mr-2" @click="openModalQueVoulezVous">Que voulez-vous dire?</button>
             </div>
             
         
@@ -39,7 +40,8 @@
                     
                 </div>
                 <div class="row justify-content-center">
-                    <button type="submit" @click="sendMessageAndImage" class="btn btn-success m-4 btn-full">Envoyer</button>
+                    <button type="submit" @click="sendMessageAndImage" class="btn btn-success m-4 btn-full" v-show="!optionModify">Envoyer</button>
+                    <button type="submit" @click="modifyMessageAndImage" class="btn btn-success m-4 btn-full" v-show="optionModify">Modifier</button>
                 </div>
             </form>
         </template>
@@ -48,7 +50,7 @@
     </div>
 
     <div class="row" v-for="msg in tableauMessages" :key="msg"><!--mettre les commentaires-->
-        <CardComponent v-bind:msg="msg" >
+        <CardComponent v-bind:msg="msg" @open-modal-to-modify="openModalToModify" >
         </CardComponent>
     </div>
 </div>
@@ -58,11 +60,12 @@
 <script>
 import CardComponent from '../components/CardComponent.vue'
 import MyModal from '../components/MyModal.vue'
+import NavBarAfter from '../components/NavBarAfter.vue'
 const API_URL ='http://localhost:3000/api/message/'
 export default {
     name: 'RoomView',
     components: {MyModal,
-        CardComponent
+        CardComponent, NavBarAfter
     },
     
   data() {
@@ -72,10 +75,18 @@ export default {
       tableauLikes:[],
       open:false,
       files:{},
-      textAreaMessage:''
+      textAreaMessage:'',
+      optionModify:false,
+      idMsgToModify:null
+
     }
   },
   methods: {
+      openModalQueVoulezVous(){
+          this.open = !this.open;
+          this.optionModify=false;
+
+      },
       close(){
          this.open=false
       },
@@ -86,7 +97,7 @@ export default {
         return;
     },
       sendMessageAndImage(){
-          if(this.textAreaMessage && localStorage.leTokenUser)
+          if(this.files[0] && this.textAreaMessage && localStorage.leTokenUser)
           {
             let formData =new FormData();
             formData.append('userID',JSON.parse(localStorage.leTokenUser).userId);
@@ -103,8 +114,73 @@ export default {
         body: formData
         })
           }
+          else if (!this.files[0] && this.textAreaMessage && localStorage.leTokenUser)
+                    {
+          
+        fetch('http://localhost:3000/api/message/addWithoutImg',{
+        method: 'POST',
+        headers:{
+        'Accept':'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token,
+        },
+        body: JSON.stringify({
+                            userId:JSON.parse(localStorage.leTokenUser).userId,
+                            descriptif:this.textAreaMessage
+                        })
+        })
+          }
 
-      }
+      },
+
+      openModalToModify(x)
+      {
+          this.open=true;
+          this.textAreaMessage =x.descriptif ;
+          this.optionModify = true;
+          this.idMsgToModif = x.id;
+          console.log(x);
+          console.log(this.idMsgToModif);
+      },
+
+        modifyMessageAndImage(){
+          if(this.files[0] && this.textAreaMessage && localStorage.leTokenUser)
+          {
+            let formData =new FormData();
+            formData.append('userID',JSON.parse(localStorage.leTokenUser).userId);
+            formData.append('descriptif',this.textAreaMessage);
+            formData.append('image',this.files[0]);
+          
+        fetch('http://localhost:3000/api/message/'+this.idMsgToModif+'/modifyMessage',{
+        method: 'PUT',
+        headers:{
+        'Accept':'application/json',
+        //'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token,
+        },
+        body: formData
+        })
+          }
+          else if (!this.files[0] && this.textAreaMessage && localStorage.leTokenUser)
+                    {
+
+            
+          
+        fetch('http://localhost:3000/api/message/'+this.idMsgToModif+'/modifyMessageWithoutImg',{
+        method: 'PUT',
+        headers:{
+        'Accept':'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token,
+        },
+        body: JSON.stringify({
+                            userId:JSON.parse(localStorage.leTokenUser).userId,
+                            descriptif:this.textAreaMessage
+                        })
+        })
+          }
+
+      },
   },
    created() {
         fetch(API_URL,{
