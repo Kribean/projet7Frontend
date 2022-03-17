@@ -2,15 +2,28 @@
 <template>
     <div class="card mt-4">
         <div class="row">
-            <div class="col-6 card-header"><h5>Groupomania</h5></div>
+            <div class="col-6 card-header"><h2>Groupomania</h2></div>
             <div class="col-3 card-header" ><button type="button" class="btn btn-dark" v-if="userId==userData.userId" @click="$emit('open-modal-to-modify',userData)" >Modifier</button></div>
-            <div class="col-3 card-header" ><button type="button" class="btn btn-danger" v-if="userId==userData.userId">Supprimer</button></div>
+            <div class="col-3 card-header" ><button type="button" class="btn btn-danger" v-if="userId==userData.userId" @click="deleteCard(userData)">Supprimer</button></div>
 
         </div>
     <div class="card-body">
-        <h5 class="card-title">Créé le {{userData.createdAt}} par {{userData.user.pseudo}}</h5>
-        <p class="card-text">{{userData.descriptif}}</p>
-        <img v-if="userData.imageUrl != 'NULL'" v-bind:src="userData.imageUrl" class="img-fluid" alt="Responsive image">
+      <div class="row ">
+        
+          <p >Créé le {{userData.createdAt}} par {{userData.user.pseudo}}</p>
+       
+        
+        </div>
+        <div class="row"><p class="card-text">{{userData.descriptif}}</p></div>
+        
+      
+      <div class="row align-item-center">
+        <div class="col-2"></div>
+        <div class="col-8"><img v-if="userData.imageUrl != 'NULL'" v-bind:src="userData.imageUrl" class="img-fluid" alt="Responsive image"></div>
+        <div class="col-2"></div>
+            
+      </div>
+        
         
     </div>
     <div class="row"></div>
@@ -85,6 +98,40 @@ export default {
       }
       
     },
+
+  deleteCard(varMsg)
+  {
+    if(varMsg.imageUrl=='NULL')
+    {
+      console.log('type 1');
+      fetch('http://localhost:3000/api/message/'+varMsg.id+'/deleteMsg',{
+      method: 'DELETE',
+      headers:{
+      'Accept':'application/json',
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token
+      }
+      })
+      .then(()=>location.reload())
+
+    }
+    else
+    {
+      console.log('type 2');
+      fetch('http://localhost:3000/api/message/'+varMsg.id+'/deleteMsgWithoutImg',{
+                    method: 'DELETE',
+                    headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token
+                    }
+                })
+                .then(()=>location.reload())
+    }
+    
+  },
+
+
     likerMessage(identiteMessage,valueLike){
       let url = 'http://localhost:3000/api/message/'+identiteMessage+'/like';
       fetch(url,{

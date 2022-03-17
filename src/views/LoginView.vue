@@ -17,7 +17,7 @@
     <input type="password" class="form-control" id="password" v-model="password" placeholder="Password" required>
   </div>
 
-  <button type="submit" @click="verifyUserLogin" class="btn btn-primary">Envoyer</button>
+  <button type="submit" v-on:click.prevent="verifyUserLogin" class="btn btn-primary m-3">Envoyer</button>
 </form>
     </div>
     <div class="col-2"></div>
@@ -54,7 +54,7 @@ export default {
                     })
                     .then((data)=>{
                       return data.json()})
-                    .then((data)=>{console.log(data);
+                    .then((data)=>{
                       localStorage.setItem('leTokenUser',JSON.stringify(data));
                       this.$router.push('room')})
                     .catch(()=>{return document.getElementById('messageErr').textContent='Les identifiants taper n\' ont pas été retrouvé'})

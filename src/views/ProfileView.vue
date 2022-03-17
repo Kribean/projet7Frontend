@@ -53,6 +53,7 @@ import NavBarAfter from '../components/NavBarAfter.vue'
                         }
                     }
                 }
+                alert(lesValiditeDeChamps);
                 if(lesValiditeDeChamps)
                 {
                     fetch('http://localhost:3000/api/auth/modifyProfil',{
@@ -70,9 +71,15 @@ import NavBarAfter from '../components/NavBarAfter.vue'
                         })
                     })
                     .then(()=>{
-                        console.log('toutou');
+
+                            console.log('toutou');
+
+                        
                         localStorage.setItem('leTokenUser', JSON.stringify({pseudo: this.pseudo, nom: this.nom, prenom: this.prenom, userId:JSON.parse(localStorage.leTokenUser).userId, token:JSON.parse(localStorage.leTokenUser).token}));
                         this.$router.push('room')})
+                        .catch(()=>{
+                            console.log('what')
+                        })
                 }
             }
 		},

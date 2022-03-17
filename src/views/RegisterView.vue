@@ -94,9 +94,7 @@ import NavBarBefore from '../components/NavBarBefore.vue'
                 }
             }
 		},
-		created() {
-			
-		}
+
 	}
 </script>
 

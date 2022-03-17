@@ -1,17 +1,17 @@
 <template>
     <nav class="navbar navbar-light bg-light mb-5">
-        <div class="col-6">
-            <router-link to="/room" class="navbar-brand">
-                <img src="../assets/icon.svg" width="30" height="30" class="d-inline-block align-top" alt="groupomania">
-                <h1>Groupomania</h1>
-            </router-link >
-        </div>
 
-        <div class="col-3">
-                <button type="button" class="btn btn-primary" @click="profil">Profil</button>
-        </div>
-        <div class="col-3">
-                <button type="button" class="btn btn-danger" @click="disconnect">Se déconnecter</button>
+            <router-link to="/room" class="navbar-brand">
+                
+                <div class="col-6 d-flex justify-content-between"><img src="../assets/icon.svg" width="60" height="60" class="d-inline-block align-top" alt="groupomania"><h1>Groupomania</h1></div>
+ 
+            </router-link >
+
+
+        <div class="col-6 d-flex justify-content-end">
+                <button type="button" class="btn btn-primary m-1" @click="profil">Profil</button>
+
+                <button type="button" class="btn btn-danger m-1" @click="disconnect">Se déconnecter</button>
         </div>
     </nav>
 </template>

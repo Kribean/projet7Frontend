@@ -113,6 +113,9 @@ export default {
         },
         body: formData
         })
+        .then(()=>{
+            
+            location.reload();})
           }
           else if (!this.files[0] && this.textAreaMessage && localStorage.leTokenUser)
                     {
@@ -129,6 +132,9 @@ export default {
                             descriptif:this.textAreaMessage
                         })
         })
+        .then(()=>{
+            
+            location.reload();})
           }
 
       },
@@ -160,6 +166,7 @@ export default {
         },
         body: formData
         })
+        .then(()=>{location.reload();})
           }
           else if (!this.files[0] && this.textAreaMessage && localStorage.leTokenUser)
                     {
@@ -178,6 +185,7 @@ export default {
                             descriptif:this.textAreaMessage
                         })
         })
+        .then(()=>{location.reload();})
           }
 
       },
