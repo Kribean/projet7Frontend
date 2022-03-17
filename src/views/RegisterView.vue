@@ -33,7 +33,7 @@
     <label class="form-check-label" for="check">J'ai lu la RGPD</label>
     <p id="checkErrorMsg"></p>
   </div>
-  <button type="submit" @click="verifyUserData" class="btn btn-primary">Envoyer</button>
+  <button type="submit" v-on:click.prevent="verifyUserData" class="btn btn-primary">Envoyer</button>
 </form>
 </div>
 

@@ -19,6 +19,11 @@
   </div>
   <button type="submit" @click="verifyUserData" class="btn btn-primary">Modifier</button>
 </form>
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8"><button type="submit" @click="deleteProfil" class="btn btn-danger">Supprimer mon compte</button></div>
+    <div class="col-2"></div>
+</div>
 </div>
 
 </template>
@@ -71,18 +76,29 @@ import NavBarAfter from '../components/NavBarAfter.vue'
                         })
                     })
                     .then(()=>{
-
-                            console.log('toutou');
-
-                        
                         localStorage.setItem('leTokenUser', JSON.stringify({pseudo: this.pseudo, nom: this.nom, prenom: this.prenom, userId:JSON.parse(localStorage.leTokenUser).userId, token:JSON.parse(localStorage.leTokenUser).token}));
                         this.$router.push('room')})
-                        .catch(()=>{
-                            console.log('what')
-                        })
+
                 }
+            },
+
+            deleteProfil(){
+                fetch('http://localhost:3000/api/auth/deleteProfil',{
+                method: 'DELETE',
+                headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token
+                }
+                })
+                .then(()=>{
+                    localStorage.removeItem('leTokenUser');
+                    this.$router.push('login');
+                })
+                
+            
             }
-		},
+    }
 
 	}
 </script>

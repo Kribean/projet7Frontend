@@ -3,8 +3,8 @@
     <div class="card mt-4">
         <div class="row">
             <div class="col-6 card-header"><h2>Groupomania</h2></div>
-            <div class="col-3 card-header" ><button type="button" class="btn btn-dark" v-if="userId==userData.userId" @click="$emit('open-modal-to-modify',userData)" >Modifier</button></div>
-            <div class="col-3 card-header" ><button type="button" class="btn btn-danger" v-if="userId==userData.userId" @click="deleteCard(userData)">Supprimer</button></div>
+            <div class="col-3 card-header" ><button type="button" class="btn btn-dark" v-if="(userId==userData.userId)||isAdmin" @click="$emit('open-modal-to-modify',userData)" >Modifier</button></div>
+            <div class="col-3 card-header" ><button type="button" class="btn btn-danger" v-if="(userId==userData.userId)||isAdmin" @click="deleteCard(userData)">Supprimer</button></div>
 
         </div>
     <div class="card-body">
@@ -72,6 +72,7 @@ export default {
         nbDeLikePourLeMessage:this.msg.likes.length,
       pseudo:JSON.parse(localStorage.getItem('leTokenUser')).pseudo,
       userId:JSON.parse(localStorage.getItem('leTokenUser')).userId,
+      isAdmin:JSON.parse(localStorage.getItem('leTokenUser')).isAdmin,
     }
   },
   methods: {
