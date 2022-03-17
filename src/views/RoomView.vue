@@ -8,16 +8,14 @@
         </section>
     </div>
     <section class="bg-secondary text-light rounded-pill">
-    <div class="row">
+    <div id="zoneEdit" class="row">
         
-            <div class="col-4 align-self-center">
-                <p class="h4 text-center"><i class="fa-solid fa-user"></i> Bienvenue {{pseudo}}</p>
+            <div class="col-lg-4 col-xs-6 align-self-center">
+                <p class="text-center"><i class="fa-solid fa-user"></i> Bienvenue {{pseudo}} - <span v-if="isAdmin"> tu es admin</span></p>
             </div>
-            <div class="col-8">
-                <button type="button" class="btn btn-light btn-lg btn-block btn-full mt-2 mb-2 mr-2" @click="openModalQueVoulezVous">Que voulez-vous dire?</button>
+            <div class="col-lg-8 col-xs-6  align-self-center">
+                <button type="button" class="btn btn-light btn-lg btn-block btn-full mt-1 mb-1" @click="openModalQueVoulezVous">Que voulez-vous dire?</button>
             </div>
-            
-        
     </div>
     </section>
     <div class="row">
@@ -77,7 +75,9 @@ export default {
       files:{},
       textAreaMessage:'',
       optionModify:false,
-      idMsgToModify:null
+      idMsgToModify:null,
+      previousUrl:'',
+      isAdmin:JSON.parse(localStorage.getItem('leTokenUser')).isAdmin,
 
     }
   },
@@ -145,7 +145,9 @@ export default {
           this.textAreaMessage =x.descriptif ;
           this.optionModify = true;
           this.idMsgToModif = x.id;
-          console.log(x);
+          this.previousUrl = x.imageUrl;
+          console.log('boom');
+          console.log(x.imageUrl);
           console.log(this.idMsgToModif);
       },
 
@@ -156,12 +158,12 @@ export default {
             formData.append('userID',JSON.parse(localStorage.leTokenUser).userId);
             formData.append('descriptif',this.textAreaMessage);
             formData.append('image',this.files[0]);
+            formData.append('previousUrl',this.previousUrl);
           
         fetch('http://localhost:3000/api/message/'+this.idMsgToModif+'/modifyMessage',{
         method: 'PUT',
         headers:{
         'Accept':'application/json',
-        //'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token,
         },
         body: formData
@@ -214,6 +216,16 @@ export default {
 <style scoped>
 .btn-full{
     width: 80%;
+}
+#zoneEdit{
+
+}
+@media screen and (max-width: 990px) {
+.btn-full{
+    width: 70%;
+    margin-left:10%;
+    font-size: 15px;
+}
 }
 
 </style>

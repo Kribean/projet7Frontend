@@ -2,10 +2,9 @@
 <template>
     <div class="card mt-4">
         <div class="row">
-            <div class="col-6 card-header"><h2>Groupomania</h2></div>
-            <div class="col-3 card-header" ><button type="button" class="btn btn-dark" v-if="(userId==userData.userId)||isAdmin" @click="$emit('open-modal-to-modify',userData)" >Modifier</button></div>
-            <div class="col-3 card-header" ><button type="button" class="btn btn-danger" v-if="(userId==userData.userId)||isAdmin" @click="deleteCard(userData)">Supprimer</button></div>
-
+            <div class="col-lg-6 col-xs-4  card-header"><h2>Groupomania</h2></div>
+            <div class="col-lg-3 col-xs-4  card-header" ><button type="button" class="btn btn-dark" v-if="(userId==userData.userId)||isAdmin" @click="$emit('open-modal-to-modify',userData)" >Modifier</button></div>
+            <div class="col-lg-3 col-xs-4  card-header" ><button type="button" class="btn btn-danger" v-if="(userId==userData.userId)||isAdmin" @click="deleteCard(userData)">Supprimer</button></div>
         </div>
     <div class="card-body">
       <div class="row ">
@@ -102,9 +101,10 @@ export default {
 
   deleteCard(varMsg)
   {
-    if(varMsg.imageUrl=='NULL')
+    console.log(varMsg);
+    if(varMsg.imageUrl!='NULL')
     {
-      console.log('type 1');
+      alert('type 1');
       fetch('http://localhost:3000/api/message/'+varMsg.id+'/deleteMsg',{
       method: 'DELETE',
       headers:{
@@ -113,12 +113,14 @@ export default {
       'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token
       }
       })
-      .then(()=>location.reload())
+      .then(()=>{
+        location.reload()
+        })
 
     }
     else
     {
-      console.log('type 2');
+      alert('type 2');
       fetch('http://localhost:3000/api/message/'+varMsg.id+'/deleteMsgWithoutImg',{
                     method: 'DELETE',
                     headers:{
@@ -127,7 +129,9 @@ export default {
                     'Authorization': 'Bearer ' + JSON.parse(localStorage.leTokenUser).token
                     }
                 })
-                .then(()=>location.reload())
+                .then(()=>{
+                  location.reload()
+                  })
     }
     
   },

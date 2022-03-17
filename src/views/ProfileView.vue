@@ -21,7 +21,7 @@
 </form>
 <div class="row">
     <div class="col-2"></div>
-    <div class="col-8"><button type="submit" @click="deleteProfil" class="btn btn-danger">Supprimer mon compte</button></div>
+    <div class="col-8"><button type="submit" @click="deleteProfil" class="btn btn-danger m-3">Supprimer mon compte</button></div>
     <div class="col-2"></div>
 </div>
 </div>

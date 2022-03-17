@@ -11,9 +11,9 @@
                 
         </div>
         <div class="row">
-            <div class="col-3"><button type="button" class="btn btn-dark m-2" v-show="!boolAppear" @click="boolAppear = !boolAppear">Modifier</button></div>
-            <div class="col-3"><button type="button" class="btn btn-success m-2" v-show="boolAppear" @click="validateComment(commData.id)">Valider</button></div>
-            <div class="col-3"><button type="button" class="btn btn-danger m-2" v-show="boolAppear" @click="deleteComment(commData.id)">Supprimer</button></div>
+            <div class="col-lg-3 col-xl-0"><button type="button" class="btn btn-dark m-2" v-show="!boolAppear" @click="boolAppear = !boolAppear">Modifier</button></div>
+            <div class="col-lg-3 col-xl-4"><button type="button" class="btn btn-success m-2" v-show="boolAppear" @click="validateComment(commData.id)">Valider</button></div>
+            <div class="col-lg-3 col-xl-4"><button type="button" class="btn btn-danger m-2" v-show="boolAppear" @click="deleteComment(commData.id)">Supprimer</button></div>
         </div>
         </form>
     </div>
