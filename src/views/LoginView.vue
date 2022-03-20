@@ -2,7 +2,7 @@
 <NavBarBefore></NavBarBefore>
 <div class="container">
   <div class="row">
-  <p id="messageErr"></p>
+  <p id="messageErr" class="bg-danger text-white"></p>
 </div>
 <div class="row">
     <div class="col-2"></div>
@@ -53,11 +53,20 @@ export default {
                         })
                     })
                     .then((data)=>{
-                      return data.json()})
+                      console.log(data.ok)
+                      console.log('tessss')
+                      if(data.ok)
+                      {
+                        return data.json()
+                      }
+                      throw new Error('Something went wrong');
+                    })
                     .then((data)=>{
+                      console.log('ok ok')
+                      console.log(JSON.stringify(data))
                       localStorage.setItem('leTokenUser',JSON.stringify(data));
                       this.$router.push('room')})
-                    .catch(()=>{return document.getElementById('messageErr').textContent='Les identifiants taper n\' ont pas été retrouvé'})
+                      .catch(()=>{return document.getElementById('messageErr').textContent='Les identifiants tapés n\' ont pas été retrouvé'})
     }
     
   },
