@@ -4,6 +4,7 @@ import RegisterView from '../views/RegisterView.vue'
 import RoomView from '../views/RoomView.vue'
 import ProfileView from '../views/ProfileView.vue'
 
+//mise en place des routes pour aller aux differentes pages
 const routes = [
   {
     path: '/',
@@ -18,9 +19,6 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: RegisterView
   },
   {
