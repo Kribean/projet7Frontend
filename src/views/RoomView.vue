@@ -27,7 +27,7 @@
     </section>
     <div class="row">
       <!--modal permettant la création ou la modification d'un post-->
-      <MyModal v-show="open" @closeModal="close">
+      <MyModal v-if="open" @closeModal="close">
         <template #title>Ecrivez votre message</template>
         <template #default>
           <form>
@@ -112,6 +112,7 @@ export default {
   methods: {
     //ouverture du modal
     openModalQueVoulezVous() {
+ 
       this.open = !this.open;
       this.optionModify = false;
     },
@@ -122,7 +123,7 @@ export default {
     //permet d'enregistrer le fichier image dans la variable file
     onFileChange(e) {
       this.files = e.target.files || e.dataTransfer.files;
-      console.log(this.files);
+
       if (!this.files.length) return;
     },
     //envoie du message avec image
